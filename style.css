@@ -1,0 +1,40 @@
+.titre_veille {
+    color: #f5eb5f;
+}
+
+.realisations_professionnelles {
+    color: #f5eb5f;    
+}
+
+/* Paragraphes */
+p {
+    color: whitesmoke;
+    font-weight: 500;
+}
+
+/* Titres H1 en couleur */
+h1 {
+    color: #18191B;
+    font-weight: 700;
+}
+
+/* Bouton d'acceuil */
+.home-button {
+    color: #18191B;
+    font-weight: 700;
+}
+
+/* Liens gras */
+.fat-link {
+    font-weight: 600;
+}
+
+
+/* Image de fond en responsive */
+body {
+    background-image: url(/Portfolio/Documents/Images/fond.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+}
