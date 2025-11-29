@@ -32,7 +32,7 @@ h1 {
 
 /* Image de fond en responsive */
 body {
-    background-image: url(/Documents/Images/fond.jpg);
+    background-image: url(/Portfolio/Documents/Images/fond.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
