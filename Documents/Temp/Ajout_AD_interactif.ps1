@@ -1,4 +1,5 @@
-# Ajouter une option de création en masse d'utilisateur à partir d'un fichier .csv
+﻿# Affiche les caractères spéciaux correctement
+$OutputEncoding = [System.Text.Encoding]::UTF8
 
 $Header_OU = @"
     #--------------------------------------------------------
@@ -62,7 +63,7 @@ Write-Host $Header_group -ForegroundColor DarkMagenta
 $Group_valid_name = $false
 while ($Group_valid_name -eq $false) {
     $Group_name = Read-Host "Nom du Groupe "
-    $Group_name_exist = Get-ADObject -Filter "Name -eq '$Group_name'" -ErrorAction SilentlyContinue
+    $Group_name_exist = Get-ADObject -Filter "ObjectClass -eq 'Group' -and Name -eq '$Group_name'" -ErrorAction SilentlyContinue
     if($Group_name_exist){
         Write-Host "Attention ! Le groupe '$Group_name' existe déjà : " -ForegroundColor Red -NoNewline
         Write-Host $Group_name_exist.DistinguishedName -ForegroundColor Cyan
