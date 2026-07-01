@@ -1,14 +1,29 @@
 ﻿# Affiche les caractères spéciaux correctement
 $OutputEncoding = [System.Text.Encoding]::UTF8
 
-$Header_OU = @"
-    #--------------------------------------------------------
-    # CREATION D'UNE NOUVELLE UNITE ORGANISATIONNELLE AD :
-    #--------------------------------------------------------
+
+$ScriptContinue = $true
+
+while($ScriptContinue -eq $true){
+$Header_Home = @"
+    #----------------------------#
+    # SCRIPT AJOUT AD INTERACTIF #
+    #----------------------------#
 "@
 
+Write-Host $Header_Home
+Write-Host "Ce script permet de créer de nouveaux objets dans l'Active Directory."
+Write-Host "Veuillez choisir une option" -ForegroundColor Cyan
+$InputChoice = Read-Host "Unité [O]rganisationnelle, [G]roupe ou [U]tilisateur "
 
-Write-Host $Header_OU -ForegroundColor DarkMagenta
+if($InputChoice -eq "O"){
+$Header_OU = @"
+    #----------------------------------------------------#
+    # CREATION D'UNE NOUVELLE UNITE ORGANISATIONNELLE AD #
+    #----------------------------------------------------#
+"@
+
+Write-Host $Header_OU -ForegroundColor Gray
 
 #Récupération des valeurs :
 # Name
@@ -49,14 +64,20 @@ Write-Host "Création de l'OU..." -ForegroundColor DarkYellow
 New-ADOrganizationalUnit @OU_params
 Write-Host "Création de l'OU terminée !" -ForegroundColor Green
 Pause
+# Bloc de fin
+$InputContinue = Read-Host "Souhaitez-vous faire autre chose ? ([O]ui/[N]on) "
+if($InputContinue -eq "N"){$ScriptContinue = $false}
+}
 
+
+elseif($InputChoice -eq "G"){
 $Header_group = @"
-    #-------------------------------------
-    # CREATION D'UN NOUVEAU GROUPE AD :
-    #-------------------------------------
+    #---------------------------------#
+    # CREATION D'UN NOUVEAU GROUPE AD #
+    #---------------------------------#
 "@
 
-Write-Host $Header_group -ForegroundColor DarkMagenta
+Write-Host $Header_group -ForegroundColor Gray
 
 #Récupération des valeurs :
 # Name
@@ -110,14 +131,20 @@ Write-Host "Création du groupe..." -ForegroundColor DarkYellow
 New-ADGroup @Group_params
 Write-Host "Création du groupe terminée !" -ForegroundColor Green
 Pause
+# Bloc de fin
+$InputContinue = Read-Host "Souhaitez-vous faire autre chose ? ([O]ui/[N]on) "
+if($InputContinue -eq "N"){$ScriptContinue = $false}
+}
 
+
+elseif($InputChoice -eq "U"){
 $Header_user = @"
-    #-----------------------------------------
-    # CREATION D'UN NOUVEL UTILISATEUR AD :
-    #-----------------------------------------
+    #-------------------------------------#
+    # CREATION D'UN NOUVEL UTILISATEUR AD #
+    #-------------------------------------#
 "@
 
-Write-Host $Header_user -ForegroundColor DarkMagenta
+Write-Host $Header_user -ForegroundColor Gray
 
 
 #Récupération des valeurs :
@@ -126,7 +153,14 @@ $User_givenname = Read-Host "Prénom "
 $User_surname = Read-Host "Nom de famille "
 # Identifiants
 $User_samaccountname = Read-Host "Identifiant de connexion (Ex : jdupont) "
-$User_principal_name = Read-Host "Identifiant de connexion (Ex : jdupont@entreprise.local) "
+Write-Host "Le script prends par défaut le nom de domaine actuel pour le nom de session de l'utilisateur (jdupont@domaine.local)." -ForegroundColor Yellow
+$Input_change_principal_name = Read-Host "Souhaitez-vous le changer ? [O]ui/[N]on (par défaut N) "
+if($Input_change_principal_name -eq "O"){$User_principal_name = Read-Host "Nom d'ouverture de session de l'utilisateur (Ex : jdupont@entreprise.local) "}
+else{
+    $DomainName = Get-ADDomain
+    $User_principal_name = $User_samaccountname + "@" + $DomainName.DNSRoot
+}
+
 # Path
 $domain_name = @(Get-ADDomain | Select-Object @{Name="Name"; Expression={$_.Name}}, @{Name="DistinguishedName"; Expression={$_.DistinguishedName}})
 $All_OU = Get-ADOrganizationalUnit -Filter * | Select-Object Name, DistinguishedName
@@ -172,3 +206,8 @@ Write-Host "Création de l'utilisateur..." -ForegroundColor DarkYellow
 New-ADUser @User_params
 Write-Host "Création de l'utilisateur terminée !" -ForegroundColor Green
 Pause
+# Bloc de fin
+$InputContinue = Read-Host "Souhaitez-vous faire autre chose ? ([O]ui/[N]on) "
+if($InputContinue -eq "N"){$ScriptContinue = $false}
+}
+}
